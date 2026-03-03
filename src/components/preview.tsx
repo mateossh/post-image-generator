@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 
 import AsdfTemplate from "./image-templates/asdf";
 import { useStore } from "@/lib/store";
+import { Button } from "./ui/button";
+import { filenameDate } from "@/lib/utils";
 
 const fonts = [
   {
@@ -36,6 +38,15 @@ type Props = {
 export function ImageFromAsyncBlob({ getBlob }: Props) {
   const [src, setSrc] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const handleDownload = () => {
+    if (!src) return;
+
+    const a = document.createElement("a");
+    a.href = src;
+    a.download = `poster-${filenameDate()}.png`;
+    a.click();
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -68,7 +79,12 @@ export function ImageFromAsyncBlob({ getBlob }: Props) {
   if (error) return <div>Failed to load image: {error}</div>;
   if (!src) return <div>Loading…</div>;
 
-  return <img src={src} alt="Image preview" />;
+  return (
+    <>
+      <img src={src} alt="Image preview" />
+      <Button onClick={handleDownload}>download</Button>
+    </>
+  );
 }
 
 export function Preview() {
