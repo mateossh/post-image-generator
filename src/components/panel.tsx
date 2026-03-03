@@ -6,6 +6,6 @@ interface Props {
   className?: string;
 }
 
-export function Pane({ children, className }: PropsWithChildren<Props>) {
+export function Panel({ children, className }: PropsWithChildren<Props>) {
   return <div className={cn("h-screen p-4", className)}>{children}</div>;
 }

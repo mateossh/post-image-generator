@@ -1,21 +1,14 @@
-import { Pane } from "@/components/pane";
-import { Preview } from "@/components/preview";
-import { Configurator } from "@/lib/configurator";
+import { ConfiguratorPanel } from "@/components/panel-configurator";
+import { PreviewPanel } from "@/components/panel-preview";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-between bg-zinc-50 font-sans dark:bg-black">
-      <Pane className="w-1/3">
-        <h1 className="text-center text-xl">Post image generator</h1>
+      <ConfiguratorPanel />
 
-        <Configurator />
-      </Pane>
+      <div className="h-screen w-px bg-neutral-400"></div>
 
-      <div className="w-px h-screen bg-neutral-400"></div>
-
-      <Pane className="w-full">
-        <Preview />
-      </Pane>
+      <PreviewPanel />
     </div>
   );
 }

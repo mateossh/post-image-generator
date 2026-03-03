@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
+import { ImagePlus } from "lucide-react";
 import type { DragEvent, FC } from "react";
 import { useCallback, useState } from "react";
-import { ImagePlus } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface DropzoneProps {
   onDrop: (files: File[]) => void;
@@ -56,7 +56,7 @@ export const Dropzone: FC<DropzoneProps> = ({ onDrop, onClick }) => {
       {isHovered ? (
         <p>Drop</p>
       ) : (
-        <div className="leading-tight text-center">
+        <div className="text-center leading-tight">
           <p>Drag here...</p>
           <p className="text-xxs">or</p>
 

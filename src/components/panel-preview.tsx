@@ -1,35 +1,14 @@
 "use client";
 
-import { ImageResponse } from "@takumi-rs/image-response/wasm";
-import module from "@takumi-rs/wasm/next";
 import { useState, useEffect } from "react";
 
-import AsdfTemplate from "./image-templates/asdf";
+import { renderImage } from "@/lib/generate-image";
 import { useStore } from "@/lib/store";
-import { Button } from "./ui/button";
 import { filenameDate } from "@/lib/utils";
 
-const fonts = [
-  {
-    name: "Geist",
-    // TODO: handle loading fonts
-    data: await fetch("https://takumi.kane.tw/fonts/Geist.woff2").then((r) => r.arrayBuffer()),
-  },
-];
-
-async function renderImage(content: string) {
-  const asdf = new ImageResponse(<AsdfTemplate content={content} />, {
-    width: 1200,
-    height: 630,
-    format: "png",
-    module,
-    fonts,
-  });
-
-  const data = await asdf.blob();
-
-  return data;
-}
+import { Panel } from "./panel";
+import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 
 type Props = {
   getBlob: () => Promise<Blob>;
@@ -46,7 +25,7 @@ export function ImageFromAsyncBlob({ getBlob }: Props) {
     a.href = src;
     a.download = `poster-${filenameDate()}.png`;
     a.click();
-  }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -77,7 +56,7 @@ export function ImageFromAsyncBlob({ getBlob }: Props) {
   }, [getBlob]);
 
   if (error) return <div>Failed to load image: {error}</div>;
-  if (!src) return <div>Loading…</div>;
+  if (!src) return <Skeleton className="h-[200px] w-full rounded-none" />;
 
   return (
     <>
@@ -87,14 +66,16 @@ export function ImageFromAsyncBlob({ getBlob }: Props) {
   );
 }
 
-export function Preview() {
+export function PreviewPanel() {
   const store = useStore();
 
   const blob = async () => {
     return await renderImage(store.content || "lorem ipsum");
-    // const res = await fetch("/image.webp");
-    // return await res.blob();
   };
 
-  return <ImageFromAsyncBlob getBlob={blob} />;
+  return (
+    <Panel className="w-full">
+      <ImageFromAsyncBlob getBlob={blob} />
+    </Panel>
+  );
 }

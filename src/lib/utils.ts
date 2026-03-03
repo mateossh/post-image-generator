@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function filenameDate() {
-  const now = new Date()
+  const now = new Date();
 
-  const yyyy = now.getFullYear()
+  const yyyy = now.getFullYear();
   const m = (now.getMonth() + 1).toString();
   const d = now.getDate().toString();
 
@@ -19,5 +19,8 @@ export function filenameDate() {
   const minutes = now.getMinutes();
 
   return `${yyyy}${mm}${dd}${hour}${minutes}`;
+}
 
+export async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
