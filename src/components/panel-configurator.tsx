@@ -2,7 +2,6 @@
 
 import { Download, ScanEye } from "lucide-react";
 
-import { Dropzone } from "@/components/dropzone";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +19,7 @@ import { Panel } from "./panel";
 
 import { IMAGE_DIMENSIONS } from '@/lib/dimensions';
 import type { Dimension } from "@/lib/dimensions";
+import { BackgroundPicker } from "./background-picker";
 
 export function ConfiguratorPanel() {
   const store = useStore();
@@ -61,11 +61,9 @@ export function ConfiguratorPanel() {
           <Label htmlFor="post-bg" className="pb-1">
             Background
           </Label>
-          <Dropzone
-            onDrop={() => console.log("nothing")}
-            onClick={() => console.log("nothing 2")}
-          />
+          <BackgroundPicker />
         </div>
+
         <div>
           <Label htmlFor="post-text" className="pb-1">
             Main content
