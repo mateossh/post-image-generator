@@ -2,19 +2,20 @@
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "ignorePatterns": [],
   "sortImports": {
-    "custom-groups": [
+    "customGroups": [
       {
-        "group-name": "react",
+        "groupName": "react",
         "elementNamePattern": ["react", "react-**"]
       },
       {
-        "group-name": "next",
+        "groupName": "next",
         "elementNamePattern": ["next", "next/**"]
       }
     ],
+
     "groups": [
       "type-import",
-      ["value-builtin", "value-external"],
+      ["react", "next", "value-builtin", "value-external"],
       "type-internal",
       "value-internal",
       ["type-parent", "type-sibling", "type-index"],
