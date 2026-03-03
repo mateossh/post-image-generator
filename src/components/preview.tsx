@@ -1,22 +1,22 @@
 "use client";
-import {useState} from 'react'
-import module from "@takumi-rs/wasm/next";
+
 import { ImageResponse } from "@takumi-rs/image-response/wasm";
+import module from "@takumi-rs/wasm/next";
+import { useState, useEffect } from "react";
+
 import AsdfTemplate from "./image-templates/asdf";
-import { useEffect } from "react";
+import { useStore } from "@/lib/store";
 
 const fonts = [
   {
     name: "Geist",
     // TODO: handle loading fonts
-    data: await fetch("https://takumi.kane.tw/fonts/Geist.woff2").then((r) =>
-      r.arrayBuffer(),
-    ),
+    data: await fetch("https://takumi.kane.tw/fonts/Geist.woff2").then((r) => r.arrayBuffer()),
   },
 ];
 
-async function renderImage() {
-  const asdf = new ImageResponse(<AsdfTemplate content="lorem ipsum" />, {
+async function renderImage(content: string) {
+  const asdf = new ImageResponse(<AsdfTemplate content={content} />, {
     width: 1200,
     height: 630,
     format: "png",
@@ -24,20 +24,16 @@ async function renderImage() {
     fonts,
   });
 
-  console.log("asdf", asdf);
-  console.log("qwer", asdf.body);
-
   const data = await asdf.blob();
-  console.log("blob data??", data);
 
   return data;
 }
 
 type Props = {
   getBlob: () => Promise<Blob>;
-}
+};
 
-export function WebpFromAsyncBlob({ getBlob }: Props) {
+export function ImageFromAsyncBlob({ getBlob }: Props) {
   const [src, setSrc] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,32 +41,29 @@ export function WebpFromAsyncBlob({ getBlob }: Props) {
     let cancelled = false;
     let urlToRevoke: string | null = null;
 
-    (async () => {
+    void (async () => {
       try {
-      setError(null);
-      setSrc(null);
+        setError(null);
+        setSrc(null);
 
-      const blob = await getBlob();
+        const blob = await getBlob();
 
-      if (cancelled) return;
+        if (cancelled) return;
 
-      const url = URL.createObjectURL(blob);
-      urlToRevoke = url;
-      setSrc(url);
-      } catch(e) {
+        const url = URL.createObjectURL(blob);
+        urlToRevoke = url;
+        setSrc(url);
+      } catch (e) {
         if (cancelled) return;
         setError(e instanceof Error ? e.message : String(e));
       }
-
     })();
 
     return () => {
       cancelled = true;
       if (urlToRevoke) URL.revokeObjectURL(urlToRevoke);
     };
-
-  }, [getBlob])
-
+  }, [getBlob]);
 
   if (error) return <div>Failed to load image: {error}</div>;
   if (!src) return <div>Loading…</div>;
@@ -78,15 +71,14 @@ export function WebpFromAsyncBlob({ getBlob }: Props) {
   return <img src={src} alt="Image preview" />;
 }
 
-
 export function Preview() {
+  const store = useStore();
+
   const blob = async () => {
-    return await renderImage();
+    return await renderImage(store.content || "lorem ipsum");
     // const res = await fetch("/image.webp");
     // return await res.blob();
-  }
+  };
 
-  return <WebpFromAsyncBlob
-    getBlob={blob}
-  />
+  return <ImageFromAsyncBlob getBlob={blob} />;
 }
