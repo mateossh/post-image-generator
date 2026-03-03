@@ -1,7 +1,6 @@
 import { Pane } from "@/components/pane";
-import { Configurator } from "./_configurator";
-
-
+import { Preview } from "@/components/preview";
+import { Configurator } from "@/lib/configurator";
 
 export default function Home() {
   return (
@@ -15,7 +14,7 @@ export default function Home() {
       <div className="w-px h-screen bg-neutral-400"></div>
 
       <Pane className="w-full">
-        Preview
+        <Preview />
       </Pane>
     </div>
   );
