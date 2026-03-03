@@ -13,6 +13,8 @@
     "shadcn": "bunx --bun shadcn@latest"
   },
   "dependencies": {
+    "@takumi-rs/image-response": "^0.70.3",
+    "@takumi-rs/wasm": "^0.70.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.576.0",
