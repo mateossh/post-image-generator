@@ -10,6 +10,9 @@ type Store = {
 
   dimensions: Dimension | null;
   setDimensions: (dimensions: Dimension) => void;
+
+  backgroundFile: File | null,
+  setBackgroundFile: (file: File | null) => void;
 };
 
 const useStore = create<Store>()((set) => ({
@@ -17,7 +20,10 @@ const useStore = create<Store>()((set) => ({
   setContent: (content) => set({ content }),
 
   dimensions: IMAGE_DIMENSIONS[0],
-  setDimensions: (dimensions: Dimension) => set({ dimensions }),
+  setDimensions: (dimensions) => set({ dimensions }),
+
+  backgroundFile: null,
+  setBackgroundFile: (file) => set({ backgroundFile: file }),
 }));
 
 export { useStore };

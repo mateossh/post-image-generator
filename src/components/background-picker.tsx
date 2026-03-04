@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEventHandler } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { ChangeEventHandler } from "react";
+
 import { Dropzone } from "./dropzone";
 import { Input } from "./ui/input";
+import { useStore } from "@/lib/store";
 
 type BackgroundPickerProps = {
   onChange?: (file: File | null) => void;
@@ -12,6 +15,8 @@ export function BackgroundPicker({ onChange }: BackgroundPickerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const store = useStore();
 
   useEffect(() => {
     if (!file) {
@@ -26,6 +31,9 @@ export function BackgroundPicker({ onChange }: BackgroundPickerProps) {
 
   const pickFile = (next: File | null) => {
     setFile(next);
+
+    store.setBackgroundFile(next);
+
     onChange?.(next);
     if (inputRef.current) inputRef.current.value = "";
   };
