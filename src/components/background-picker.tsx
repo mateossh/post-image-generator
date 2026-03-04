@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEventHandler } from "react";
 
+import { useStore } from "@/lib/store";
+
 import { Dropzone } from "./dropzone";
 import { Input } from "./ui/input";
-import { useStore } from "@/lib/store";
 
 type BackgroundPickerProps = {
   onChange?: (file: File | null) => void;

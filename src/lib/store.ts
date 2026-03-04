@@ -11,7 +11,7 @@ type Store = {
   dimensions: Dimension | null;
   setDimensions: (dimensions: Dimension) => void;
 
-  backgroundFile: File | null,
+  backgroundFile: File | null;
   setBackgroundFile: (file: File | null) => void;
 };
 

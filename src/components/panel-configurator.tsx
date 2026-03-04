@@ -2,10 +2,9 @@
 
 import { Download, ScanEye } from "lucide-react";
 
+import type { Dimension } from "@/lib/dimensions";
+
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useStore } from "@/lib/store";
 import {
   Combobox,
   ComboboxContent,
@@ -13,13 +12,14 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from "@/components/ui/combobox"
+} from "@/components/ui/combobox";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { IMAGE_DIMENSIONS } from "@/lib/dimensions";
+import { useStore } from "@/lib/store";
 
-import { Panel } from "./panel";
-
-import { IMAGE_DIMENSIONS } from '@/lib/dimensions';
-import type { Dimension } from "@/lib/dimensions";
 import { BackgroundPicker } from "./background-picker";
+import { Panel } from "./panel";
 
 export function ConfiguratorPanel() {
   const store = useStore();
@@ -28,7 +28,7 @@ export function ConfiguratorPanel() {
     if (!value) return;
 
     store.setDimensions(value);
-  }
+  };
 
   return (
     <Panel className="w-1/3">
@@ -37,7 +37,8 @@ export function ConfiguratorPanel() {
       <section className="space-y-2 py-4">
         <div>
           <Label htmlFor="post-dimensions">Dimensions</Label>
-          <Combobox id="post-dimensions"
+          <Combobox
+            id="post-dimensions"
             items={IMAGE_DIMENSIONS}
             itemToStringValue={(option: Dimension) => option.label}
             onValueChange={handleDimensionsChange}
