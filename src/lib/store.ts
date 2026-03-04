@@ -1,6 +1,8 @@
 import { create } from "zustand";
-import { IMAGE_DIMENSIONS } from "./dimensions";
+
 import type { Dimension } from "./dimensions";
+
+import { IMAGE_DIMENSIONS } from "./dimensions";
 
 type Store = {
   content: string | null;
@@ -14,10 +16,8 @@ const useStore = create<Store>()((set) => ({
   content: null,
   setContent: (content) => set({ content }),
 
-  dimensions: null,
+  dimensions: IMAGE_DIMENSIONS[0],
   setDimensions: (dimensions: Dimension) => set({ dimensions }),
 }));
-
-useStore.setState({ dimensions: IMAGE_DIMENSIONS[0] })
 
 export { useStore };
