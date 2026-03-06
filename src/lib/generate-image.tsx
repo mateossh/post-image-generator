@@ -35,6 +35,7 @@ export async function renderImage(templateData: TemplateData) {
       module,
       fonts,
       fetchedResources,
+      // drawDebugBorder: true,
     },
   );
 
