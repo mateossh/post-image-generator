@@ -37,15 +37,29 @@ type ContainerProps = PropsWithChildren<{
 
 function Container({ backgroundFile, children }: ContainerProps) {
   return (
-    <div
-      tw="w-full h-full flex items-center justify-center bg-green-200 p-16"
-      style={{
-        backgroundImage: `url(${backgroundFile})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center", // NOTE: it doesn't behave correctly
-      }}
-    >
-      {children}
-    </div>
+    <>
+      <div
+        tw="w-full h-full flex items-center justify-center bg-green-200 p-16 relative"
+        style={{
+          backgroundImage: `url(${backgroundFile})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center", // NOTE: it doesn't behave correctly
+        }}
+      >
+        {children}
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          height: "20%",
+          backgroundImage: "linear-gradient(0deg, red 0%, rgba(0, 255, 0, 0) 100%)",
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+        }}
+      >
+      </div>
+    </>
   );
 }
