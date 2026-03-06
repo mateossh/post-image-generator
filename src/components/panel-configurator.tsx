@@ -67,6 +67,18 @@ export function ConfiguratorPanel() {
         </div>
 
         <div>
+          <Label htmlFor="post-header" className="pb-1">
+            Header
+          </Label>
+          <Input
+            className="bg-white"
+            id="post-header"
+            placeholder="lorem ipsum dolor sit amet..."
+            onChange={(e) => store.setHeader(e.target.value)}
+          />
+        </div>
+
+        <div>
           <Label htmlFor="post-text" className="pb-1">
             Main content
           </Label>

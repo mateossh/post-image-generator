@@ -8,6 +8,9 @@ type Store = {
   content: string | null;
   setContent: (content: string) => void;
 
+  header: string | null;
+  setHeader: (header: string) => void;
+
   footer: string | null;
   setFooter: (footer: string) => void;
 
@@ -21,6 +24,9 @@ type Store = {
 const useStore = create<Store>()((set) => ({
   content: null,
   setContent: (content) => set({ content }),
+
+  header: null,
+  setHeader: (header) => set({ header }),
 
   footer: null,
   setFooter: (footer) => set({ footer }),
