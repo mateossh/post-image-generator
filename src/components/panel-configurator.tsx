@@ -20,6 +20,7 @@ import { useStore } from "@/lib/store";
 
 import { BackgroundPicker } from "./background-picker";
 import { Panel } from "./panel";
+import { Input } from "./ui/input";
 
 export function ConfiguratorPanel() {
   const store = useStore();
@@ -74,6 +75,18 @@ export function ConfiguratorPanel() {
             id="post-text"
             placeholder="lorem ipsum dolor sit amet..."
             onChange={(e) => store.setContent(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="post-footer" className="pb-1">
+            Footer
+          </Label>
+          <Input
+            className="bg-white"
+            id="post-footer"
+            placeholder="lorem ipsum dolor sit amet..."
+            onChange={(e) => store.setFooter(e.target.value)}
           />
         </div>
 

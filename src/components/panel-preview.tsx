@@ -31,6 +31,7 @@ export function PreviewPanel() {
     const templateData = {
       content: store.content || "lorem ipsum",
       backgroundFile: backgroundUrl,
+      footer: store.footer,
     };
 
     return await renderImage(templateData);

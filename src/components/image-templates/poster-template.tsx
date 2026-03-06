@@ -3,6 +3,7 @@ import type { ReactNode, PropsWithChildren } from "react";
 export type TemplateData = {
   content: ReactNode;
   backgroundFile: string | null;
+  footer: ReactNode | null;
 };
 
 type Props = {
@@ -10,33 +11,21 @@ type Props = {
 };
 
 export default function PosterTemplate({ templateData }: Props) {
-  const { content, backgroundFile } = templateData;
+  const { content, footer, backgroundFile } = templateData;
 
   return (
     <Container backgroundFile={backgroundFile}>
-      <div tw="h-full flex flex-col justify-end items-center">
+      <div tw="w-full h-full flex flex-col justify-end items-center">
 
-        <div tw="text-5xl bg-pink-100 p-4 font-bold text-blue-400">{content}</div>
+        <div tw="text-5xl bg-pink-100 p-4 font-bold text-blue-400">some title</div>
 
         <div
-          tw="w-full inline p-4 text-4xl bg-yellow-200"
-          style={{ textWrap: 'pretty' }}
+          tw="max-w-full p-4 text-4xl bg-yellow-200"
         >
-          lorem ipsum dolor sit amet
-          <br />
-          lorem ipsum dolor sit amet
-          <br />
-          lorem ipsum dolor sit amet
-          <br />
-          lorem ipsum dolor sit amet
-          <br />
-          lorem ipsum dolor sit amet
-          <br />
-          lorem ipsum dolor sit amet
-          <br />
-
+          {content}
         </div>
 
+        {footer && <div tw="w-full text-left pt-4">{footer}</div>}
       </div>
     </Container>
   );
