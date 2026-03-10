@@ -7,6 +7,7 @@ export type TemplateData = {
   footer: ReactNode | null;
   header: ReactNode | null;
   dimensions: Dimension;
+  gradientColor: string | null;
 };
 
 type Props = {
@@ -14,10 +15,10 @@ type Props = {
 };
 
 export default function PosterTemplate({ templateData }: Props) {
-  const { content, footer, header, backgroundFile } = templateData;
+  const { content, footer, header, backgroundFile, gradientColor } = templateData;
 
   return (
-    <Container backgroundFile={backgroundFile}>
+    <Container backgroundFile={backgroundFile} gradientColor={gradientColor}>
       <div tw="w-full h-full flex flex-col justify-end items-center">
         {header &&
           <div tw="text-5xl bg-pink-100 p-4 font-bold text-blue-400">{header}</div>
@@ -36,10 +37,13 @@ export default function PosterTemplate({ templateData }: Props) {
 }
 
 type ContainerProps = PropsWithChildren<{
-  backgroundFile: string | null
+  backgroundFile: string | null,
+  gradientColor: string | null,
 }>
 
-function Container({ backgroundFile, children }: ContainerProps) {
+function Container({ backgroundFile, children, gradientColor }: ContainerProps) {
+  const color = gradientColor || "#0000ff";
+
   return (
     <div
       tw="w-full h-full flex items-center justify-center bg-green-200 p-16 relative"
@@ -53,7 +57,7 @@ function Container({ backgroundFile, children }: ContainerProps) {
         style={{
           width: "100%",
           height: "40%",
-          backgroundImage: "linear-gradient(0deg, red 0%, rgba(255, 0, 0, 0) 100%)",
+          backgroundImage: `linear-gradient(0deg, ${color} 0%, ${color}00 100%)`,
           position: 'absolute',
           left: 0,
           bottom: 0,

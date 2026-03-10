@@ -45,6 +45,7 @@ type FormValues = {
   heading: string;
   content: string;
   footer: string;
+  gradientColor: string;
 };
 
 export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps) {
@@ -65,6 +66,7 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
       heading: "",
       content: "",
       footer: "",
+      gradientColor: "#ff00ff",
     } as FormValues,
     onSubmit: async ({ value }) => {
       console.log("You submitted the following values:", value);
@@ -78,6 +80,7 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
         footer: value.footer,
         header: value.heading,
         dimensions: selectedDimensions,
+        gradientColor: value.gradientColor,
       };
 
       const generatedPoster = await renderImage(templateData);
@@ -146,6 +149,33 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                       if (!file) return;
                       field.handleChange(file);
                     }}
+                  />
+                  {isInvalid && (
+                    <FieldError errors={field.state.meta.errors} />
+                  )}
+                </Field>
+              )
+            }}
+          />
+
+
+          <form.Field
+            name="gradientColor"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Heading</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    className="bg-white"
+                    placeholder="lorem ipsum dolor sit amet..."
+                    autoComplete="off"
                   />
                   {isInvalid && (
                     <FieldError errors={field.state.meta.errors} />
