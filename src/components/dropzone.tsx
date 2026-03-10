@@ -43,7 +43,7 @@ export const Dropzone: FC<DropzoneProps> = ({ onDrop, onClick }) => {
   return (
     <section
       className={cn(
-        "flex h-[220px] w-full flex-col items-center justify-center rounded-md border border-input bg-white text-sm text-muted-foreground",
+        "flex h-[220px] w-full flex-col items-center justify-center rounded-md border border-input bg-transparent text-sm text-muted-foreground",
         isHovered && "border-slate-500",
       )}
       onDragStart={preventDefaults}

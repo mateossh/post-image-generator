@@ -35,6 +35,7 @@ import { useImage } from "@/hooks/use-image";
 import type { Dispatch, SetStateAction } from "react";
 import { Logo } from "./logo";
 import Link from "next/link";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 
 type ConfiguratorPanelProps = {
   posterUrl: string | null;
@@ -176,17 +177,24 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Gradient color</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    className="bg-white"
-                    placeholder="lorem ipsum dolor sit amet..."
-                    autoComplete="off"
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="lorem ipsum dolor sit amet..."
+                      autoComplete="off"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      <div
+                        className="size-4 border rounded-full"
+                        style={{ backgroundColor: `${field.state.value}` }}
+                      ></div>
+                    </InputGroupAddon>
+                  </InputGroup>
                   {isInvalid && (
                     <FieldError errors={field.state.meta.errors} />
                   )}
@@ -209,7 +217,6 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
-                    className="bg-white"
                     placeholder="lorem ipsum dolor sit amet..."
                     autoComplete="off"
                   />
@@ -228,17 +235,24 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Heading background color</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    className="bg-white"
-                    placeholder="lorem ipsum dolor sit amet..."
-                    autoComplete="off"
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="lorem ipsum dolor sit amet..."
+                      autoComplete="off"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      <div
+                        className="size-4 border rounded-full"
+                        style={{ backgroundColor: `${field.state.value}` }}
+                      ></div>
+                    </InputGroupAddon>
+                  </InputGroup>
                   {isInvalid && (
                     <FieldError errors={field.state.meta.errors} />
                   )}
@@ -262,7 +276,6 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
-                    className="bg-white"
                     placeholder="lorem ipsum dolor sit amet..."
                     autoComplete="off"
                   />
@@ -282,17 +295,24 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Content background color</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    className="bg-white"
-                    placeholder="lorem ipsum dolor sit amet..."
-                    autoComplete="off"
-                  />
+                  <InputGroup>
+                    <InputGroupInput
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="lorem ipsum dolor sit amet..."
+                      autoComplete="off"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      <div
+                        className="size-4 border rounded-full"
+                        style={{ backgroundColor: `${field.state.value}` }}
+                      ></div>
+                    </InputGroupAddon>
+                  </InputGroup>
                   {isInvalid && (
                     <FieldError errors={field.state.meta.errors} />
                   )}
@@ -315,7 +335,6 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
-                    className="bg-white"
                     placeholder="lorem ipsum dolor sit amet..."
                     autoComplete="off"
                   />
