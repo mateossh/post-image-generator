@@ -8,6 +8,8 @@ export type TemplateData = {
   header: ReactNode | null;
   dimensions: Dimension;
   gradientColor: string | null;
+  contentBgColor: string | null;
+  headingBgColor: string | null;
 };
 
 type Props = {
@@ -15,17 +17,23 @@ type Props = {
 };
 
 export default function PosterTemplate({ templateData }: Props) {
-  const { content, footer, header, backgroundFile, gradientColor } = templateData;
+  const { content, footer, header, backgroundFile, gradientColor, contentBgColor, headingBgColor } = templateData;
 
   return (
     <Container backgroundFile={backgroundFile} gradientColor={gradientColor}>
       <div tw="w-full h-full flex flex-col justify-end items-center">
         {header &&
-          <div tw="text-5xl bg-pink-100 p-4 font-bold text-blue-400">{header}</div>
+          <div
+            tw="text-5xl p-4 font-bold"
+            style={{ backgroundColor: `${headingBgColor}` }}
+          >
+            {header}
+          </div>
         }
 
         <div
-          tw="max-w-full p-4 text-4xl bg-yellow-200"
+          tw="max-w-full p-4 text-4xl "
+          style={{ backgroundColor: `${contentBgColor}` }}
         >
           {content}
         </div>

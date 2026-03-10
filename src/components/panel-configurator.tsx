@@ -48,6 +48,8 @@ type FormValues = {
   content: string;
   footer: string;
   gradientColor: string;
+  contentBgColor: string;
+  headingBgColor: string;
 };
 
 export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps) {
@@ -69,6 +71,8 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
       content: "",
       footer: "",
       gradientColor: "#ff00ff",
+      contentBgColor: "#fff085",
+      headingBgColor: "#ffba00",
     } as FormValues,
     onSubmit: async ({ value }) => {
       console.log("You submitted the following values:", value);
@@ -83,6 +87,8 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
         header: value.heading,
         dimensions: selectedDimensions,
         gradientColor: value.gradientColor,
+        contentBgColor: value.contentBgColor,
+        headingBgColor: value.headingBgColor,
       };
 
       const generatedPoster = await renderImage(templateData);
@@ -91,7 +97,7 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
   })
 
   return (
-    <Panel className="flex grow-1 justify-start flex-col w-1/3">
+    <Panel className="flex grow-1 justify-start flex-col w-1/3 overflow-y-scroll">
       <Link href="/">
         <Logo className="pb-4" />
       </Link>
@@ -215,6 +221,32 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
             }}
           />
 
+          <form.Field
+            name="headingBgColor"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Heading background color</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    className="bg-white"
+                    placeholder="lorem ipsum dolor sit amet..."
+                    autoComplete="off"
+                  />
+                  {isInvalid && (
+                    <FieldError errors={field.state.meta.errors} />
+                  )}
+                </Field>
+              )
+            }}
+          />
+
 
           <form.Field
             name="content"
@@ -223,6 +255,33 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Content</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    className="bg-white"
+                    placeholder="lorem ipsum dolor sit amet..."
+                    autoComplete="off"
+                  />
+                  {isInvalid && (
+                    <FieldError errors={field.state.meta.errors} />
+                  )}
+                </Field>
+              )
+            }}
+          />
+
+
+          <form.Field
+            name="contentBgColor"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Content background color</FieldLabel>
                   <Input
                     id={field.name}
                     name={field.name}
