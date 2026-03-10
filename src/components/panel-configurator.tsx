@@ -32,9 +32,22 @@ import { renderImage } from "@/lib/generate-image";
 import { download } from "@/lib/download";
 import { useImage } from "@/hooks/use-image";
 
-export function ConfiguratorPanel({ posterUrl, setBlob }) {
-  const store = useStore();
+import type { Dispatch, SetStateAction } from "react";
 
+type ConfiguratorPanelProps = {
+  posterUrl: string | null;
+  setBlob: Dispatch<SetStateAction<Blob | null>>;
+};
+
+type FormValues = {
+  image: File | null;
+  dimensions: Dimension | null;
+  heading: string;
+  content: string;
+  footer: string;
+};
+
+export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps) {
   const { setBlob: setBackgroundBlob, url: backgroundUrl } = useImage();
 
   const handleDownloadPoster = () => {
@@ -48,19 +61,15 @@ export function ConfiguratorPanel({ posterUrl, setBlob }) {
   const form = useForm({
     defaultValues: {
       image: null,
-      dimensions: IMAGE_DIMENSIONS[0],
+      dimensions: IMAGE_DIMENSIONS[0] as Dimension,
       heading: "",
       content: "",
       footer: "",
-    },
+    } as FormValues,
     onSubmit: async ({ value }) => {
       console.log("You submitted the following values:", value);
 
-      // store.setFooter(value.footer)
-      // store.setHeader(value.heading)
-      // store.setContent(value.content)
-      // store.setBackgroundFile(value.image);
-      // store.setDimensions(value.dimensions);
+      const selectedDimensions = value.dimensions ?? IMAGE_DIMENSIONS[0];
 
       const templateData = {
         content: value.content || "lorem ipsum",
@@ -68,7 +77,7 @@ export function ConfiguratorPanel({ posterUrl, setBlob }) {
         backgroundFile: backgroundUrl,
         footer: value.footer,
         header: value.heading,
-        dimensions: value.dimensions,
+        dimensions: selectedDimensions,
       };
 
       const generatedPoster = await renderImage(templateData);
@@ -98,7 +107,10 @@ export function ConfiguratorPanel({ posterUrl, setBlob }) {
                     items={IMAGE_DIMENSIONS}
                     itemToStringValue={(option: Dimension) => option.label}
                     value={field.state.value}
-                    onValueChange={field.handleChange}
+                    onValueChange={(value) => {
+                      if (!value) return;
+                      field.handleChange(value)
+                    }}
                   >
                     <ComboboxInput placeholder="Select a framework" />
                     <ComboboxContent>
@@ -131,6 +143,7 @@ export function ConfiguratorPanel({ posterUrl, setBlob }) {
                     onChange={(e) => {
                       const file = e.currentTarget.files?.[0] ?? null;
                       setBackgroundBlob(file); // NOTE: ????
+                      if (!file) return;
                       field.handleChange(file);
                     }}
                   />
