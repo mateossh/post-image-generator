@@ -33,6 +33,8 @@ import { download } from "@/lib/download";
 import { useImage } from "@/hooks/use-image";
 
 import type { Dispatch, SetStateAction } from "react";
+import { Logo } from "./logo";
+import Link from "next/link";
 
 type ConfiguratorPanelProps = {
   posterUrl: string | null;
@@ -89,10 +91,12 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
   })
 
   return (
-    <Panel className="w-1/3">
-      <h1 className="text-center text-xl pb-4">Post image generator</h1>
+    <Panel className="flex grow-1 justify-start flex-col w-1/3">
+      <Link href="/">
+        <Logo className="pb-4" />
+      </Link>
 
-      <form id="configurator-form" onSubmit={(e) => {
+      <form id="configurator-form" className="grow-1" onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
       }}>
@@ -165,7 +169,7 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Heading</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Gradient color</FieldLabel>
                   <Input
                     id={field.name}
                     name={field.name}
@@ -275,6 +279,10 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
           <Download />
           Download
         </Button>
+      </div>
+
+      <div className="text-xs">
+        <Link href="https://github.com/mateossh" className="underline">Author: mateossh</Link>
       </div>
     </Panel>
   );
