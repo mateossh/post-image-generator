@@ -16,6 +16,8 @@
     "@base-ui/react": "^1.2.0",
     "@takumi-rs/image-response": "^0.70.4",
     "@takumi-rs/wasm": "^0.70.4",
+    "@tanstack/react-form": "^1.28.4",
+    "@tanstack/react-form-nextjs": "^1.28.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.576.0",

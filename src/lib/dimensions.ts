@@ -1,6 +1,11 @@
 // https://www.figma.com/resource-library/facebook-size-guide/
 // https://www.figma.com/resource-library/facebook-size-guide/#facebook-post-image-size
 
+interface ImageDimensions {
+  width: number;
+  height: number;
+}
+
 export const IMAGE_DIMENSIONS = [
   {
     key: "verticalPost",
@@ -25,3 +30,12 @@ export const IMAGE_DIMENSIONS = [
 ] as const;
 
 export type Dimension = (typeof IMAGE_DIMENSIONS)[number];
+
+export function getDimensionKey(dimensions: ImageDimensions | null): Dimension["key"] | null {
+  if (!dimensions) return null;
+
+  const match = IMAGE_DIMENSIONS.find(
+    (d) => d.dimensions[0] === dimensions.width && d.dimensions[1] === dimensions.height
+  );
+  return match?.key ?? null;
+}

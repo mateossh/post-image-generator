@@ -6,8 +6,6 @@ import type { TemplateData } from "@/components/image-templates/poster-template"
 
 import PosterTemplate from "@/components/image-templates/poster-template";
 
-import { useStore } from "./store";
-
 const fonts = [
   {
     name: "Geist",
@@ -19,7 +17,7 @@ const fonts = [
 ];
 
 export async function renderImage(templateData: TemplateData) {
-  const { dimensions } = useStore.getState();
+  const { dimensions } = templateData;
 
   let fetchedResources: Awaited<ReturnType<typeof fetchResources>> = [];
   if (templateData.backgroundFile) {

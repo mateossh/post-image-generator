@@ -3,21 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEventHandler } from "react";
 
-import { useStore } from "@/lib/store";
-
 import { Dropzone } from "./dropzone";
 import { Input } from "./ui/input";
 
-type BackgroundPickerProps = {
-  onChange?: (file: File | null) => void;
-};
+type BackgroundPickerProps = React.ComponentProps<"input">;
 
-export function BackgroundPicker({ onChange }: BackgroundPickerProps) {
+export function BackgroundPicker({ onChange, ...props }: BackgroundPickerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  const store = useStore();
 
   useEffect(() => {
     if (!file) {
@@ -33,9 +27,7 @@ export function BackgroundPicker({ onChange }: BackgroundPickerProps) {
   const pickFile = (next: File | null) => {
     setFile(next);
 
-    store.setBackgroundFile(next);
-
-    onChange?.(next);
+    // onChange?.(next);
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -60,11 +52,14 @@ export function BackgroundPicker({ onChange }: BackgroundPickerProps) {
     <>
       <Input
         ref={inputRef}
-        id="post-bg"
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={handleInputChange}
+        onChange={(e) => {
+          if (onChange) onChange(e)
+          handleInputChange(e);
+        }}
+        {...props}
       />
 
       <div className="space-y-2">

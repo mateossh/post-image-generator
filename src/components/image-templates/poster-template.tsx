@@ -1,10 +1,12 @@
 import type { ReactNode, PropsWithChildren } from "react";
+import type { Dimension } from '@/lib/dimensions';
 
 export type TemplateData = {
   content: ReactNode;
   backgroundFile: string | null;
   footer: ReactNode | null;
   header: ReactNode | null;
+  dimensions: Dimension;
 };
 
 type Props = {
