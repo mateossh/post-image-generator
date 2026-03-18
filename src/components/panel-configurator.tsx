@@ -1,6 +1,9 @@
 "use client";
 
+import { useForm } from "@tanstack/react-form";
 import { Download, ScanEye } from "lucide-react";
+import Link from "next/link";
+import type { Dispatch, SetStateAction } from "react";
 
 import type { Dimension } from "@/lib/dimensions";
 
@@ -13,28 +16,22 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
-import { IMAGE_DIMENSIONS } from "@/lib/dimensions";
-import { useStore } from "@/lib/store";
-
-import { BackgroundPicker } from "./background-picker";
-import { Panel } from "./panel";
-import { Input } from "./ui/input";
-
-import { useForm } from '@tanstack/react-form';
-
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { renderImage } from "@/lib/generate-image";
-import { download } from "@/lib/download";
+} from "@/components/ui/field";
 import { useImage } from "@/hooks/use-image";
+import { IMAGE_DIMENSIONS } from "@/lib/dimensions";
+import { download } from "@/lib/download";
+import { renderImage } from "@/lib/generate-image";
+import { useStore } from "@/lib/store";
 
-import type { Dispatch, SetStateAction } from "react";
+import { BackgroundPicker } from "./background-picker";
 import { Logo } from "./logo";
-import Link from "next/link";
+import { Panel } from "./panel";
+import { Input } from "./ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 
 type ConfiguratorPanelProps = {
@@ -51,18 +48,23 @@ type FormValues = {
   gradientColor: string;
   contentBgColor: string;
   headingBgColor: string;
+  contentTextColor: string;
+  headingTextColor: string;
 };
 
-export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps) {
+export function ConfiguratorPanel({
+  posterUrl,
+  setBlob,
+}: ConfiguratorPanelProps) {
   const { setBlob: setBackgroundBlob, url: backgroundUrl } = useImage();
 
   const handleDownloadPoster = () => {
     if (!posterUrl) {
-      console.log('no blob!');
+      console.log("no blob!");
       return;
     }
     download(posterUrl);
-  }
+  };
 
   const form = useForm({
     defaultValues: {
@@ -71,9 +73,11 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
       heading: "",
       content: "",
       footer: "",
-      gradientColor: "#ff00ff",
-      contentBgColor: "#fff085",
-      headingBgColor: "#ffba00",
+      gradientColor: "#1c398e",
+      contentBgColor: "#2b7fff",
+      headingBgColor: "#2b7fff",
+      headingTextColor: "#fafafa",
+      contentTextColor: "#fafafa",
     } as FormValues,
     onSubmit: async ({ value }) => {
       console.log("You submitted the following values:", value);
@@ -89,30 +93,37 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
         dimensions: selectedDimensions,
         gradientColor: value.gradientColor,
         contentBgColor: value.contentBgColor,
+        contentTextColor: value.contentTextColor,
         headingBgColor: value.headingBgColor,
+        headingTextColor: value.headingTextColor,
       };
 
       const generatedPoster = await renderImage(templateData);
+
       setBlob(generatedPoster);
     },
-  })
+  });
 
   return (
-    <Panel className="flex grow-1 justify-start flex-col w-1/3 overflow-y-scroll">
+    <Panel className="flex w-1/3 grow-1 flex-col justify-start overflow-y-scroll">
       <Link href="/">
         <Logo className="pb-4" />
       </Link>
 
-      <form id="configurator-form" className="grow-1" onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}>
+      <form
+        id="configurator-form"
+        className="grow-1"
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}
+      >
         <FieldGroup>
-
           <form.Field
             name="dimensions"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Dimensions</FieldLabel>
@@ -123,7 +134,7 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     value={field.state.value}
                     onValueChange={(value) => {
                       if (!value) return;
-                      field.handleChange(value)
+                      field.handleChange(value);
                     }}
                   >
                     <ComboboxInput placeholder="Select a framework" />
@@ -139,15 +150,15 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     </ComboboxContent>
                   </Combobox>
                 </Field>
-              )
+              );
             }}
           />
-
 
           <form.Field
             name="image"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Background</FieldLabel>
@@ -161,19 +172,17 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                       field.handleChange(file);
                     }}
                   />
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              )
+              );
             }}
           />
-
 
           <form.Field
             name="gradientColor"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Gradient color</FieldLabel>
@@ -190,23 +199,22 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     />
                     <InputGroupAddon align="inline-end">
                       <div
-                        className="size-4 border rounded-full"
+                        className="size-4 rounded-full border"
                         style={{ backgroundColor: `${field.state.value}` }}
                       ></div>
                     </InputGroupAddon>
                   </InputGroup>
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              )
+              );
             }}
           />
 
           <form.Field
             name="heading"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Heading</FieldLabel>
@@ -220,21 +228,22 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     placeholder="lorem ipsum dolor sit amet..."
                     autoComplete="off"
                   />
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              )
+              );
             }}
           />
 
           <form.Field
             name="headingBgColor"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Heading background color</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Heading background color
+                  </FieldLabel>
                   <InputGroup>
                     <InputGroupInput
                       id={field.name}
@@ -248,24 +257,56 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     />
                     <InputGroupAddon align="inline-end">
                       <div
-                        className="size-4 border rounded-full"
+                        className="size-4 rounded-full border"
                         style={{ backgroundColor: `${field.state.value}` }}
                       ></div>
                     </InputGroupAddon>
                   </InputGroup>
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              )
+              );
             }}
           />
 
+          <form.Field
+            name="headingTextColor"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>
+                    Heading text color
+                  </FieldLabel>
+                  <InputGroup>
+                    <InputGroupInput
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="lorem ipsum dolor sit amet..."
+                      autoComplete="off"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      <div
+                        className="size-4 rounded-full border"
+                        style={{ backgroundColor: `${field.state.value}` }}
+                      ></div>
+                    </InputGroupAddon>
+                  </InputGroup>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
 
           <form.Field
             name="content"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Content</FieldLabel>
@@ -279,22 +320,22 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     placeholder="lorem ipsum dolor sit amet..."
                     autoComplete="off"
                   />
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              )
+              );
             }}
           />
-
 
           <form.Field
             name="contentBgColor"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Content background color</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Content background color
+                  </FieldLabel>
                   <InputGroup>
                     <InputGroupInput
                       id={field.name}
@@ -308,23 +349,56 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     />
                     <InputGroupAddon align="inline-end">
                       <div
-                        className="size-4 border rounded-full"
+                        className="size-4 rounded-full border"
                         style={{ backgroundColor: `${field.state.value}` }}
                       ></div>
                     </InputGroupAddon>
                   </InputGroup>
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              )
+              );
+            }}
+          />
+
+          <form.Field
+            name="contentTextColor"
+            children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>
+                    Content text color
+                  </FieldLabel>
+                  <InputGroup>
+                    <InputGroupInput
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="lorem ipsum dolor sit amet..."
+                      autoComplete="off"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      <div
+                        className="size-4 rounded-full border"
+                        style={{ backgroundColor: `${field.state.value}` }}
+                      ></div>
+                    </InputGroupAddon>
+                  </InputGroup>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
             }}
           />
 
           <form.Field
             name="footer"
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Footer</FieldLabel>
@@ -338,11 +412,9 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
                     placeholder="lorem ipsum dolor sit amet..."
                     autoComplete="off"
                   />
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              )
+              );
             }}
           />
         </FieldGroup>
@@ -360,7 +432,9 @@ export function ConfiguratorPanel({ posterUrl, setBlob }: ConfiguratorPanelProps
       </div>
 
       <div className="text-xs">
-        <Link href="https://github.com/mateossh" className="underline">Author: mateossh</Link>
+        <Link href="https://github.com/mateossh" className="underline">
+          Author: mateossh
+        </Link>
       </div>
     </Panel>
   );
