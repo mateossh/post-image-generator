@@ -37,7 +37,13 @@ export async function renderImage(templateData: TemplateData) {
     },
   );
 
-  const data = await asdf.blob();
+  try {
+    const data = await asdf.blob();
 
-  return data;
+    return data;
+  } catch (err) {
+    console.error("error in wasm:", err);
+
+    return null;
+  }
 }

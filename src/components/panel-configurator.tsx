@@ -31,8 +31,15 @@ import { useStore } from "@/lib/store";
 import { BackgroundPicker } from "./background-picker";
 import { Logo } from "./logo";
 import { Panel } from "./panel";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
 import { Input } from "./ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
+import { Textarea } from "./ui/textarea";
 
 type ConfiguratorPanelProps = {
   posterUrl: string | null;
@@ -100,6 +107,9 @@ export function ConfiguratorPanel({
 
       const generatedPoster = await renderImage(templateData);
 
+      // TODO: proper error handling
+      if (!generatedPoster) console.error("ERROR WHILE RENDERING IMAGE!");
+
       setBlob(generatedPoster);
     },
   });
@@ -154,269 +164,319 @@ export function ConfiguratorPanel({
             }}
           />
 
-          <form.Field
-            name="image"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Background</FieldLabel>
-                  <BackgroundPicker
-                    id={field.name}
-                    name={field.name}
-                    onChange={(e) => {
-                      const file = e.currentTarget.files?.[0] ?? null;
-                      setBackgroundBlob(file); // NOTE: ????
-                      if (!file) return;
-                      field.handleChange(file);
-                    }}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+          <Accordion type="multiple" defaultValue={["background"]}>
+            <AccordionItem value="background">
+              <AccordionTrigger>Background</AccordionTrigger>
+              <AccordionContent>
+                <form.Field
+                  name="image"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Background image
+                        </FieldLabel>
+                        <BackgroundPicker
+                          id={field.name}
+                          name={field.name}
+                          onChange={(e) => {
+                            const file = e.currentTarget.files?.[0] ?? null;
+                            setBackgroundBlob(file); // NOTE: ????
+                            if (!file) return;
+                            field.handleChange(file);
+                          }}
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
 
-          <form.Field
-            name="gradientColor"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Gradient color</FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="lorem ipsum dolor sit amet..."
-                      autoComplete="off"
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <div
-                        className="size-4 rounded-full border"
-                        style={{ backgroundColor: `${field.state.value}` }}
-                      ></div>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+                <form.Field
+                  name="gradientColor"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Gradient color
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupInput
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            placeholder="lorem ipsum dolor sit amet..."
+                            autoComplete="off"
+                          />
+                          <InputGroupAddon align="inline-end">
+                            <div
+                              className="size-4 rounded-full border"
+                              style={{
+                                backgroundColor: `${field.state.value}`,
+                              }}
+                            ></div>
+                          </InputGroupAddon>
+                        </InputGroup>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
+              </AccordionContent>
+            </AccordionItem>
 
-          <form.Field
-            name="heading"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Heading</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    placeholder="lorem ipsum dolor sit amet..."
-                    autoComplete="off"
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+            <AccordionItem value="heading">
+              <AccordionTrigger>Heading</AccordionTrigger>
+              <AccordionContent>
+                <form.Field
+                  name="heading"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>Text</FieldLabel>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          placeholder="lorem ipsum dolor sit amet..."
+                          autoComplete="off"
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
 
-          <form.Field
-            name="headingBgColor"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Heading background color
-                  </FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="lorem ipsum dolor sit amet..."
-                      autoComplete="off"
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <div
-                        className="size-4 rounded-full border"
-                        style={{ backgroundColor: `${field.state.value}` }}
-                      ></div>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+                <form.Field
+                  name="headingBgColor"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Background color
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupInput
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            placeholder="lorem ipsum dolor sit amet..."
+                            autoComplete="off"
+                          />
+                          <InputGroupAddon align="inline-end">
+                            <div
+                              className="size-4 rounded-full border"
+                              style={{
+                                backgroundColor: `${field.state.value}`,
+                              }}
+                            ></div>
+                          </InputGroupAddon>
+                        </InputGroup>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
 
-          <form.Field
-            name="headingTextColor"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Heading text color
-                  </FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="lorem ipsum dolor sit amet..."
-                      autoComplete="off"
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <div
-                        className="size-4 rounded-full border"
-                        style={{ backgroundColor: `${field.state.value}` }}
-                      ></div>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+                <form.Field
+                  name="headingTextColor"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>Text color</FieldLabel>
+                        <InputGroup>
+                          <InputGroupInput
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            placeholder="lorem ipsum dolor sit amet..."
+                            autoComplete="off"
+                          />
+                          <InputGroupAddon align="inline-end">
+                            <div
+                              className="size-4 rounded-full border"
+                              style={{
+                                backgroundColor: `${field.state.value}`,
+                              }}
+                            ></div>
+                          </InputGroupAddon>
+                        </InputGroup>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
+              </AccordionContent>
+            </AccordionItem>
 
-          <form.Field
-            name="content"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Content</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    placeholder="lorem ipsum dolor sit amet..."
-                    autoComplete="off"
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+            <AccordionItem value="content">
+              <AccordionTrigger>Content</AccordionTrigger>
+              <AccordionContent>
+                <form.Field
+                  name="content"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>Text</FieldLabel>
+                        <Textarea
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          placeholder="lorem ipsum dolor sit amet..."
+                          autoComplete="off"
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
 
-          <form.Field
-            name="contentBgColor"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Content background color
-                  </FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="lorem ipsum dolor sit amet..."
-                      autoComplete="off"
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <div
-                        className="size-4 rounded-full border"
-                        style={{ backgroundColor: `${field.state.value}` }}
-                      ></div>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+                <form.Field
+                  name="contentBgColor"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Background color
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupInput
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            placeholder="lorem ipsum dolor sit amet..."
+                            autoComplete="off"
+                          />
+                          <InputGroupAddon align="inline-end">
+                            <div
+                              className="size-4 rounded-full border"
+                              style={{
+                                backgroundColor: `${field.state.value}`,
+                              }}
+                            ></div>
+                          </InputGroupAddon>
+                        </InputGroup>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
 
-          <form.Field
-            name="contentTextColor"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Content text color
-                  </FieldLabel>
-                  <InputGroup>
-                    <InputGroupInput
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="lorem ipsum dolor sit amet..."
-                      autoComplete="off"
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <div
-                        className="size-4 rounded-full border"
-                        style={{ backgroundColor: `${field.state.value}` }}
-                      ></div>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+                <form.Field
+                  name="contentTextColor"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>Text color</FieldLabel>
+                        <InputGroup>
+                          <InputGroupInput
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            placeholder="lorem ipsum dolor sit amet..."
+                            autoComplete="off"
+                          />
+                          <InputGroupAddon align="inline-end">
+                            <div
+                              className="size-4 rounded-full border"
+                              style={{
+                                backgroundColor: `${field.state.value}`,
+                              }}
+                            ></div>
+                          </InputGroupAddon>
+                        </InputGroup>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
+              </AccordionContent>
+            </AccordionItem>
 
-          <form.Field
-            name="footer"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Footer</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    placeholder="lorem ipsum dolor sit amet..."
-                    autoComplete="off"
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          />
+            <AccordionItem value="footer">
+              <AccordionTrigger>Footer</AccordionTrigger>
+              <AccordionContent>
+                <form.Field
+                  name="footer"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>Text</FieldLabel>
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          placeholder="lorem ipsum dolor sit amet..."
+                          autoComplete="off"
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </FieldGroup>
       </form>
 
