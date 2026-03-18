@@ -8,7 +8,10 @@ import { Input } from "./ui/input";
 
 type BackgroundPickerProps = React.ComponentProps<"input">;
 
-export function BackgroundPicker({ onChange, ...props }: BackgroundPickerProps) {
+export function BackgroundPicker({
+  onChange,
+  ...props
+}: BackgroundPickerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -24,11 +27,15 @@ export function BackgroundPicker({ onChange, ...props }: BackgroundPickerProps) 
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
-  const pickFile = (next: File | null) => {
-    setFile(next);
+  const syncInputFile = (next: File | null) => {
+    const input = inputRef.current;
+    if (!input) return;
 
-    // onChange?.(next);
-    if (inputRef.current) inputRef.current.value = "";
+    const dataTransfer = new DataTransfer();
+    if (next) dataTransfer.items.add(next);
+
+    input.files = dataTransfer.files;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
   };
 
   const handleBrowse = () => {
@@ -38,14 +45,17 @@ export function BackgroundPicker({ onChange, ...props }: BackgroundPickerProps) 
   const handleDrop = (files: File[]) => {
     const firstImage = files.find((f) => f.type.startsWith("image/")) ?? null;
     if (!firstImage) return;
-    pickFile(firstImage);
+
+    setFile(firstImage);
+    syncInputFile(firstImage);
   };
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const next = e.currentTarget.files?.[0] ?? null;
     if (!next) return;
     if (!next.type.startsWith("image/")) return;
-    pickFile(next);
+
+    setFile(next);
   };
 
   return (
@@ -56,7 +66,7 @@ export function BackgroundPicker({ onChange, ...props }: BackgroundPickerProps) 
         accept="image/*"
         className="hidden"
         onChange={(e) => {
-          if (onChange) onChange(e)
+          if (onChange) onChange(e);
           handleInputChange(e);
         }}
         {...props}
