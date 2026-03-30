@@ -83,7 +83,7 @@ function Container({
       style={{
         backgroundImage: `url(${backgroundFile})`,
         backgroundSize: "cover",
-        backgroundPosition: "center", // NOTE: it doesn't behave correctly
+        backgroundPosition: "center",
       }}
     >
       <div
